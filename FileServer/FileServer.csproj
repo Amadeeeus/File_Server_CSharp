@@ -8,14 +8,15 @@
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="13.0.1" />
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
         <PackageReference Include="cuid.net" Version="6.0.0" />
+        <PackageReference Include="DotNetEnv" Version="3.1.1" />
         <PackageReference Include="FluentValidation" Version="11.10.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Extensions\" />
       <Folder Include="Repositories\Implementations\" />
       <Folder Include="Repositories\Interfaces\" />
     </ItemGroup>
