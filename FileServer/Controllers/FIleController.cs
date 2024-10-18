@@ -10,8 +10,7 @@ namespace FileServer.Controllers;
 [Route("v1/files")]
 [ApiController]
 
-
-public class FIleController
+public class FIleController: ControllerBase
 {
     private readonly ILogger _logger;
     private readonly IFileService _service;
