@@ -5,7 +5,7 @@ namespace FileServer.Extensions;
 
 public class HashingString
 {
-    public string adminPassword { get; set; } = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
+    public string adminPassword { get; set; } = Environment.GetEnvironmentVariable("AdminPassword");
 
     public string HashString(string input)
     {

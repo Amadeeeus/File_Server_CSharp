@@ -42,10 +42,11 @@ public class FileService : IFileService
         return result;
     }
 
-    public async Task<FileView> GetFileAsync(string filename, string password)
+    public async Task<FileView> GetFileAsync(string password)
     {
         _logger.LogInformation("Service:Getting file with name");
-        var file = await _fileRepository.GetFileAsync(filename);
+       var hash =  _hashingString.HashString(password);
+        var file = await _fileRepository.GetFileAsync(hash);
         var check = _passwordHasher.VerifyHashedPassword(file, file.Password, password);
         if (check != PasswordVerificationResult.Success)
         {
@@ -62,8 +63,14 @@ public class FileService : IFileService
         var fileInfo = _mapper.Map<FileDTO>(file);
         fileInfo.Password = _passwordHasher.HashPassword(fileInfo, password);
         fileInfo.Id = new Cuid2().ToString();
+        if (!Directory.Exists(filepath))
+        {
+            Directory.CreateDirectory(filepath);
+        }
+        var fileExtension = Path.GetExtension(fileInfo.FileName); 
         fileInfo.FileName = fileInfo.Id;
-        var currentPath = Path.Combine(filepath, fileInfo.FileName);
+        var currentPath = Path.Combine(filepath, fileInfo.FileName+fileExtension);
+        fileInfo.FilePath = currentPath;
         await using (var stream = new FileStream(currentPath, FileMode.Create))
         {
             await file.CopyToAsync(stream);
@@ -72,17 +79,18 @@ public class FileService : IFileService
         await _fileRepository.UploadFileAsync(fileInfo);
     }
 
-    public async Task DeleteFileAsync(string filename, string password)
+    public async Task DeleteFileAsync(string password)
     {
         _logger.LogInformation("Service:Deleting file with name");
-        var file = await _fileRepository.GetFileAsync(filename);
+        _passwordHasher.HashPassword(null!, password);
+        var file = await _fileRepository.GetFileAsync(password);
         var check = _passwordHasher.VerifyHashedPassword(file, file.Password, password);
         if (check != PasswordVerificationResult.Success)
         {
             _logger.LogError("Service:DeleteFileAsync:Invalid password");
             throw new UnauthorizedAccessException("invalid password");
         }
-        await _fileRepository.DeleteFileAsync(filename);
+        await _fileRepository.DeleteFileAsync(password);
         _logger.LogInformation("Service:Deleted file with name");
     }
 }

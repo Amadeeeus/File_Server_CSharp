@@ -10,9 +10,9 @@ namespace FileServer.Controllers;
 [Route("v1/files")]
 [ApiController]
 
-public class FIleController: ControllerBase
+public class FIleController: Controller
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<FIleController> _logger;
     private readonly IFileService _service;
 
     public FIleController(ILogger<FIleController> logger, IFileService service)
@@ -22,6 +22,7 @@ public class FIleController: ControllerBase
     }
 
     [HttpGet]
+    [Route("/files/")]
     public async Task<IActionResult> GetAllFilesAsync([FromQuery]string password)
     {
         _logger.LogInformation("Controller:Getting all files");
@@ -30,15 +31,15 @@ public class FIleController: ControllerBase
     }
 
     [HttpGet]
-    [Route("{id}")]
-    public async Task<IActionResult> GetFileAsync([FromBody] string filename, [FromQuery] string password)
+    public async Task<IActionResult> GetFileAsync([FromQuery] string password)
     {
-        _logger.LogInformation("Controller:Getting file with name{0}", filename);
-        var result = await _service.GetFileAsync(filename, password);
+        _logger.LogInformation("Controller:Getting file");
+        var result = await _service.GetFileAsync(password);
         return Ok(new CustomSucessResponse<FileView>(result));
     }
 
     [HttpPost]
+    [Route("/file/{password}")]
     public async Task<IActionResult> UploadFile(IFormFile file, [FromQuery] string password)
     {
         _logger.LogInformation("Controller:Uploading file");
@@ -47,10 +48,10 @@ public class FIleController: ControllerBase
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteFile(string filename, [FromQuery] string password)
+    public async Task<IActionResult> DeleteFile([FromQuery] string password)
     {
-        _logger.LogInformation("Controller:Deleting file {0}", filename);
-        await _service.DeleteFileAsync(filename, password);
+        _logger.LogInformation("Controller:Deleting file");
+        await _service.DeleteFileAsync(password);
         return Ok(new BaseSuccessResponse());
     }
 }

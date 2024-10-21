@@ -9,7 +9,7 @@ public class GlobalExceptionHandler: IExceptionHandler
     {
         context.Response.StatusCode = exception switch
         {
-            FileNotFoundException _ => StatusCodes.Status404NotFound,
+            //FileNotFoundException _ => StatusCodes.Status404NotFound,
             KeyNotFoundException _ => StatusCodes.Status404NotFound,
             UnauthorizedAccessException _ => StatusCodes.Status401Unauthorized,
             IOException _ => StatusCodes.Status500InternalServerError,
