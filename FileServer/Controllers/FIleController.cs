@@ -23,35 +23,35 @@ public class FIleController: Controller
 
     [HttpGet]
     [Route("/files/")]
-    public async Task<IActionResult> GetAllFilesAsync([FromQuery]string password)
+    public async Task<IActionResult> GetAllFilesAsync([FromQuery]string cuid)
     {
         _logger.LogInformation("Controller:Getting all files");
-        var result = await _service.GetAllFilesAsync(password);
+        var result = await _service.GetAllFilesAsync(cuid);
         return Ok(new CustomSucessResponse<List<FileView>>(result));
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetFileAsync([FromQuery] string password)
+    public async Task<IActionResult> GetFileAsync([FromQuery] string cuid)
     {
         _logger.LogInformation("Controller:Getting file");
-        var result = await _service.GetFileAsync(password);
+        var result = await _service.GetFileAsync(cuid);
         return Ok(new CustomSucessResponse<FileView>(result));
     }
 
     [HttpPost]
-    [Route("/file/{password}")]
-    public async Task<IActionResult> UploadFile(IFormFile file, [FromQuery] string password)
+
+    public async Task<IActionResult> UploadFile(IFormFile file, [FromQuery] string? password, [FromQuery] int expireDays = 1)
     {
         _logger.LogInformation("Controller:Uploading file");
-        await _service.UploadFileAsync(file,password);
+        await _service.UploadFileAsync(file,password, expireDays);
         return Ok(new BaseSuccessResponse());
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteFile([FromQuery] string password)
+    public async Task<IActionResult> DeleteFile([FromQuery] string password, [FromQuery] string cuid)
     {
         _logger.LogInformation("Controller:Deleting file");
-        await _service.DeleteFileAsync(password);
+        await _service.DeleteFileAsync(password, cuid);
         return Ok(new BaseSuccessResponse());
     }
 }

@@ -16,9 +16,11 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 //builder.Services.AddScoped<PasswordHasher<FileDTO>>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddServices();
+builder.Services.AddControllers();
+builder.Services.AddQuartz();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLogging();
-builder.Services.AddControllers();
+
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
@@ -26,7 +28,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseExceptionHandler("/");
-app.UseHttpsRedirection();
 app.MapControllers();
 app.UseStaticFiles();
 app.Run();

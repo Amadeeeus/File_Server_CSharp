@@ -21,10 +21,10 @@ public class FileRepository : IFileRepository
         return await _context.Files.ToListAsync();
     }
 
-    public async Task<FileDTO> GetFileAsync(string password)
+    public async Task<FileDTO> GetFileAsync(string cuid)
     {
         _logger.LogInformation("Repository:GetFileAsync}");
-        return await _context.Files.FirstOrDefaultAsync(f => f.Password == password);
+        return (await _context.Files.FirstOrDefaultAsync(f => f.FileName == cuid)!);
     }
 
     public async Task UploadFileAsync(FileDTO dto)
@@ -34,10 +34,10 @@ public class FileRepository : IFileRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteFileAsync(string password)
+    public async Task DeleteFileAsync(string cuid)
     {
         _logger.LogInformation("Repository:DeleteFileAsync");
-        _context.Files.Remove((await _context.Files.FirstOrDefaultAsync(x => x.Password == password))!);
+        _context.Files.Remove((await _context.Files.FirstOrDefaultAsync(x => x.FileName == cuid))!);
         await _context.SaveChangesAsync();
     }
 }

@@ -6,6 +6,6 @@ public interface IFileService
 {
     Task<List<FileView>> GetAllFilesAsync(string password);
     Task<FileView> GetFileAsync(string password);
-    Task UploadFileAsync(IFormFile file, string password);
-    Task DeleteFileAsync(string password);
+    Task UploadFileAsync(IFormFile file, string password, int expireDays);
+    Task DeleteFileAsync(string password, string cuid);
 }
